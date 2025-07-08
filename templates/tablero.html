@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loteria Mexicana</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <style>
+    /*estilo para definir cuales columnas dinamicas*/
+    .board-container {
+        grid-template-columns: repeat({{columns }}, ifr )
+    }
+    </style>
+</head>
+<body>
+    <div class="board-container">
+        {% for filas in tablero %}
+        {% for celda in filas%}
+        <div class="card-cell" style="background-color:{{celda.color}};"></div>
+        {% endfor %}
+    {% endfor %}        
+
+    </div>
+</body>
+</html>
