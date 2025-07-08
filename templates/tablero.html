@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loteria Mexicana</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-    <style>
-    /*estilo para definir cuales columnas dinamicas*/
-    .board-container {
-        grid-template-columns: repeat({{columns }}, ifr )
-    }
-    </style>
+    <title>Lotería Mexicana</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="board-container">
-        {% for filas in tablero %}
-        {% for celda in filas%}
-        <div class="card-cell" style="background-color:{{celda.color}};"></div>
+    <table>
+        {% for i in range(filas) %}
+            <tr>
+                {% for j in range(columnas) %}
+                    <td class="{% if (i + j) % 3 == 0 %}azul{% elif (i + j) % 3 == 1 %}amarillo{% else %}rosa{% endif %}">
+                        {{ tablero[i * columnas + j] }}
+                    </td>
+                {% endfor %}
+            </tr>
         {% endfor %}
-    {% endfor %}        
-
-    </div>
+    </table>
 </body>
 </html>

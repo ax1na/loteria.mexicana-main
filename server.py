@@ -1,100 +1,38 @@
 from flask import Flask, render_template
-import random #importamos la libreri random para el niovel 4
+import random
 
 app = Flask(__name__)
 
-# lista es de cartas para el nivel 4
+# Lista de cartas de la lotería
+cartas = ["1  El Gallo","2  El Diablito","3  La Dama","4  El catrín","5  El paraguas",
+        "6  La sirena","7  La escalera","8  La botella","9  El barril","10 El árbol",
+        "11 El melón","12 El valiente","13 El gorrito","14 La muerte","15 La pera","16 La bandera",
+        "17 El bandolón","18 El violoncello","19 La garza","20 El pájaro","21 La mano",
+        "22 La bota","23 La luna","24 El cotorro","25 El borracho","26 El negrito","27 El corazón","28 La sandía","29 El tambor",
+        "30 El camarón","31 Las jaras","32 El músico","33 La araña","34 El soldado",
+        "35 La estrella","36 El cazo","37 El mundo","38 El apache","39 El nopal","40 El alacrán","41 La rosa","42 La calavera",
+        "43 La campana","44 El cantarito","45 El venado","46 El sol","47 La corona","48 La chalupa","49 El pino","50 El pescado","51 La palma","52 La maceta","53 El arpa","54 La rana"]
 
-cartas = ["1  El Gallo","2  El Diablito","3  La Dama","4  El catrín","5  El paraguas","6  La sirena","7  La escalera",
-          "8  La botella","9  El barril","10 El árbol","11 El melón","12 El valiente","13 El gorrito","14 La muerte",
-          "15 La pera","16 La bandera","17 El bandolón","18 El violoncello","19 La garza","20 El pájaro","21 La mano",
-          "22 La bota","23 La luna","24 El cotorro","25 El borracho","26 El negrito","27 El corazón","28 La sandía",
-          "29 El tambor","30 El camarón","31 Las jaras","32 El músico","33 La araña","34 El soldado","35 La estrella",
-          "36 El cazo","37 El mundo","38 El apache","39 El nopal","40 El alacrán","41 La rosa","42 La calavera",
-          "43 La campana","44 El cantarito","45 El venado","46 El sol","47 La corona","48 La chalupa","49 El pino",
-          "50 El pescado","51 La palma","52 La maceta","53 El arpa","54 La rana"]
 
-#definir lor colores para el tablero
-
-COLORE_TABLERO = ["#287fed", "#eadb00", "#dda8c4"]
-tablero = []
-
-#funcion auxiliar para generar el tablero
-def generar_tablero(filas, columnas):
-    todas_celdas = filas * columnas
-    #asgurarse de que no pidamos mas cartas de las que ya tenemos
-    if todas_celdas > len(cartas):
-        cartas_tablero = random.sample(cartas, len(cartas)) #usamos 
-    while len(cartas_tablero) < todas_celdas:
-        cartas_tablero.append (random.choice(cartas))     
-    else:
-        cartas_tablero = random.sample(cartas, todas_celdas)
-        #bajaremos las listas para asegurarnos de que el orden se aleatorio para cada tablero
-    random.shuffle(cartas_tablero)
-    cartas_index = 0
-    for r in range(filas):
-        fila_actual = []
-        for c in range(columnas):
-            color_index = (r + c) % len(COLORE_TABLERO)
-            color = COLORE_TABLERO[color_index]
-            #agregamos la carta y el color a la fila actual
-            nombre_carta = cartas_tablero(cartas_index)
-            cartas_index += 1
-            fila_actual.append({'color': color, 'carta': nombre_carta})
-            
-                         
-    
+# Ruta para /loteria que muestra un tablero 4x4
 @app.route('/loteria')
-def loteria_default():
-    filas = 4
-    columnas = 4
-    tablero = []
-    for r in range(filas):
-        filas_actual = []
-        for c in range(columnas):
-            color_index = (r + c)%len (COLORE_TABLERO)
-            color = COLORE_TABLERO[color_index]
-            filas_actual.append({'color': color})
-            tablero.append(filas_actual)
-#enviaremos filas, columnas y el tablero a la plantilla
-        return render_template('tablero.html', filas=filas, 
-        coliumnas=columnas,
-        tablero=tablero)  
+def loteria_4x4():
+    filas, columnas = 4, 4
+    tablero = random.sample(cartas, filas * columnas)
+    return render_template('tablero.html', filas=filas, columnas=columnas, tablero=tablero)
 
-#2. ruta para el nivel 2: tablero 4 x X
-@app.route('/loteria/<int:x>')
-def loteria_filas_dinamicas(x):
-    filas = x
+# Ruta para /loteria/<x> que muestra un tablero de 4 columnas y x filas
+@app.route('/loteria/<int:filas>')
+def loteria_filas(filas):
     columnas = 4
-    tablero = []
-    for r in range(filas):
-        fila_actual = []
-        for c in range(columnas):
-            color_index = (r + c) % len(COLORE_TABLERO)
-            color = COLORE_TABLERO[color_index]
-            fila_actual.append({'color': color})
-        tablero.append(fila_actual)
-    return render_template('tablero.html', filas=filas,
-                           columnas=columnas, tablero=tablero)
-    
-    
- #ruta 3 tablero X y Y
-    
-@app.route ('/loteria/<int:x>/<int:y>')
-def loteria_filas_columnas_dinamicas(x, y):
-        filas = x
-        columnas = y
-        tablero = []
-        for r in range(filas):
-            fila_actual = []
-            for c in range(columnas):
-                color_index = (r + c) % len(COLORE_TABLERO)
-                color = COLORE_TABLERO[color_index]
-                fila_actual.append({'color': color})
-            tablero.append(fila_actual)
-            return render_template('tablero.html', filas=filas,
-                               columnas=columnas, tablero=tablero)
-            
-        
-if __name__ == "__main__":
+    tablero = random.sample(cartas, filas * columnas)
+    return render_template('tablero.html', filas=filas, columnas=columnas, tablero=tablero)
+
+# Ruta para /loteria/<x>/<y> que muestra un tablero de x filas y y columnas
+@app.route('/loteria/<int:filas>/<int:columnas>')
+def loteria_personalizado(filas, columnas):
+    tablero = random.sample(cartas, filas * columnas)
+    return render_template('tablero.html', filas=filas, columnas=columnas, tablero=tablero)
+
+if __name__ == '__main__':
     app.run(debug=True)
