@@ -17,7 +17,33 @@ cartas = ["1  El Gallo","2  El Diablito","3  La Dama","4  El catrín","5  El par
 #definir lor colores para el tablero
 
 COLORE_TABLERO = ["#287fed", "#eadb00", "#dda8c4"]
+tablero = []
 
+#funcion auxiliar para generar el tablero
+def generar_tablero(filas, columnas):
+    todas_celdas = filas * columnas
+    #asgurarse de que no pidamos mas cartas de las que ya tenemos
+    if todas_celdas > len(cartas):
+        cartas_tablero = random.sample(cartas, len(cartas)) #usamos 
+    while len(cartas_tablero) < todas_celdas:
+        cartas_tablero.append (random.choice(cartas))     
+    else:
+        cartas_tablero = random.sample(cartas, todas_celdas)
+        #bajaremos las listas para asegurarnos de que el orden se aleatorio para cada tablero
+    random.shuffle(cartas_tablero)
+    cartas_index = 0
+    for r in range(filas):
+        fila_actual = []
+        for c in range(columnas):
+            color_index = (r + c) % len(COLORE_TABLERO)
+            color = COLORE_TABLERO[color_index]
+            #agregamos la carta y el color a la fila actual
+            nombre_carta = cartas_tablero(cartas_index)
+            cartas_index += 1
+            fila_actual.append({'color': color, 'carta': nombre_carta})
+            
+                         
+    
 @app.route('/loteria')
 def loteria_default():
     filas = 4
@@ -31,9 +57,9 @@ def loteria_default():
             filas_actual.append({'color': color})
             tablero.append(filas_actual)
 #enviaremos filas, columnas y el tablero a la plantilla
-    return render_template('tablero.html', filas=filas, 
-   coliumnas=columnas,
-   tablero=tablero)  
+        return render_template('tablero.html', filas=filas, 
+        coliumnas=columnas,
+        tablero=tablero)  
 
 #2. ruta para el nivel 2: tablero 4 x X
 @app.route('/loteria/<int:x>')
@@ -54,7 +80,7 @@ def loteria_filas_dinamicas(x):
     
  #ruta 3 tablero X y Y
     
-@app.route ('loteria/<int:x>/<int:y>')
+@app.route ('/loteria/<int:x>/<int:y>')
 def loteria_filas_columnas_dinamicas(x, y):
         filas = x
         columnas = y
